@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95d780327cd894747ba6f0efc0c34f52, type: 3}
+  m_Name: Haruna
+  m_EditorClassIdentifier: 
+  _exp: 0a000000190000002800000037000000460000004b000000500000005a0000005f00000069000000730000008200000091000000a0000000af000000b9000000c8000000d7000000e600000081010000a9010000e001000017020000440200007b020000110300004d0300007f0300009d03000000000000
+  _name: "\uD558\uB8E8\uB098"
+  _baseRarity: 3
+  _picture: {fileID: 21300000, guid: 0348854a18247d24581ef87fd541c9b0, type: 3}
+  _fullPicture: {fileID: 21300000, guid: 7519da9ef21d98f488e566d5378f43fa, type: 3}
+  _maxHP: 2188
+  _attack: 374
+  _defense: 19
+  _healing: 1438
+  _accuracy: 924
+  _evasion: 205
+  _critRate: 205
+  _critDamage: 200
+  _stability: 1944
+  _range: 750
+  _ccStrength: 100
+  _ccResist: 100
+  _attackSpeed: 10000
+  _moveSpeed: 200
+  _costRecovery: 700
+  _ammo: 0500000001000000
+  _school: 1
+  _role: 0
+  _position: 0
+  _attackType: 2
+  _armorType: 1
+  _combatClass: 0
+  _weaponType: 10
+  _item1Type: 0
+  _item2Type: 0
+  _item3Type: 0
+  _cover: 1
+  _urban: 4
+  _outdoors: 0
+  _indoors: 2
+  _skillCost: 4
+  _skillName:
+  - Piercing Elegance
+  - Exploding Exotic
+  - The Dignity of the Gourmet
+  - The Serenity of the Gourmet
+  _skillDesc:
+  - Attack a selected enemy with {%} of Haruna's Attack, bullet will penetrate target
+    and damage subsequent targets at sequential {%} damage reduction per target.
+    (Damage reduction caps at a low of {%})
+  - Every {d} seconds, attack one enemy with {%} of Haruna's Attack.
+  - Increase HP by {%}.
+  - When not moving, increase Attack by {%}.

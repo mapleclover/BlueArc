@@ -2,44 +2,16 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
-public class DataManager : MonoBehaviour
+public class DataManager : Singleton<DataManager>
 {
-    private static DataManager instance = null;
-    
-    private void Awake()
-    {
-        if (null == instance)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(this.gameObject);
-        }
-    }
-
-    public static DataManager Instance
-    {
-        get
-        {
-            if (null == instance)
-            {
-                return null;
-            }
-
-            return instance;
-        }
-    }
-
-    private void Save()
+    public void Save()
     {
         try
         {
             BinaryFormatter bf = new BinaryFormatter();
 
             FileStream file = File.Open(Application.persistentDataPath + "/" + "SaveTest.dat", FileMode.Create);
-
+            
             Data data = new Data();
 
             SavePlayer(data);
@@ -49,6 +21,7 @@ public class DataManager : MonoBehaviour
             bf.Serialize(file, data);
 
             file.Close();
+            Debug.Log("성공적으로 저장되었습니다.");
         }
         catch (System.Exception)
         {
@@ -72,14 +45,14 @@ public class DataManager : MonoBehaviour
         data.MyItemData = Player.Instance.MyItems;
     }
     
-    private void Load()
+    public bool Load()
     {
         try
         {
             BinaryFormatter bf = new BinaryFormatter();
 
             FileStream file = File.Open(Application.persistentDataPath + "/" + "SaveTest.dat", FileMode.Open);
-
+            Debug.Log(Application.persistentDataPath);
             Data data = (Data)bf.Deserialize(file);
 
             file.Close();
@@ -87,12 +60,14 @@ public class DataManager : MonoBehaviour
             LoadPlayer(data);
             LoadCharacters(data);
             LoadItems(data);
+            Debug.Log("성공적으로 로드되었습니다.");
         }
         catch (System.Exception)
         {
-            //This is for handling errors;
-            throw;
+            return false;
         }
+
+        return true;
     }
     
     private void LoadPlayer(Data data)
@@ -108,6 +83,20 @@ public class DataManager : MonoBehaviour
     private void LoadItems(Data data)
     {
         Player.Instance.MyItems = data.MyItemData;
+    }
+
+    public void Delete()
+    {
+        try
+        {
+            File.Delete(Application.persistentDataPath + "/" + "SaveTest.dat");
+            Debug.Log("성공적으로 삭제되었습니다.");
+        }
+        catch (System.Exception)
+        {
+            //This is for handling errors;
+            throw;
+        }
     }
     private void Update()
     {

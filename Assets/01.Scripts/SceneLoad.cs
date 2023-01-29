@@ -3,35 +3,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class SceneLoad : MonoBehaviour
+public class SceneLoad : Singleton<SceneLoad>
 {
-    private static SceneLoad instance = null;
     private bool isChange = false;
-    private void Awake()
-    {
-        if (null == instance)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(this.gameObject);
-        }
-    }
-
-    public static SceneLoad Instance
-    {
-        get
-        {
-            if (null == instance)
-            {
-                return null;
-            }
-
-            return instance;
-        }
-    }
     
     public void ChangeScene(int i)
     {
@@ -52,7 +26,7 @@ public class SceneLoad : MonoBehaviour
     IEnumerator Loading(int i)
     {
         isChange = true;
-        yield return SceneManager.LoadSceneAsync("00.LoadingScene");
+        yield return SceneManager.LoadSceneAsync("00.Loading");
         GameObject obj = GameObject.Find("LoadingGauge");
         Slider slider = obj.GetComponent<Slider>();
         slider.value = 0.0f;
@@ -63,7 +37,7 @@ public class SceneLoad : MonoBehaviour
     public IEnumerator Loading(string mapName)
     {
         isChange = true;
-        yield return SceneManager.LoadSceneAsync("00.LoadingScene");
+        yield return SceneManager.LoadSceneAsync("00.Loading");
         GameObject obj = GameObject.Find("LoadingGauge");
         Slider slider = obj.GetComponent<Slider>();
         slider.value = 0.0f;

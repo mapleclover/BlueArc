@@ -1,45 +1,74 @@
 using System.Collections.Generic;
-using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : Singleton<Player>
 {
-    private static Player instance = null;
-    private void Awake()
+    public PlayerData MyPlayer = new PlayerData();
+    public List<CharacterData> MyStudents = new List<CharacterData>();
+    public List<ItemData> MyItems = new List<ItemData>();
+
+    public bool AddStudent(StudentData sd)
     {
-        if (null == instance)
+        if (CheckDupStudent(sd))
         {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
+            int amount = 0;
+            switch (sd.BaseRarity)
+            {
+                case 1:
+                    amount = 1;
+                    break;
+                case 2:
+                    amount = 10;
+                    break;
+                case 3:
+                    amount = 50;
+                    break;
+            }
+            AddItem(DataContainer.Instance.items[0], amount);
+            return false;
         }
+        CharacterData newCharacter = new CharacterData(sd.Name, sd.BaseRarity);
+        MyStudents.Add(newCharacter);
+        DataManager.Instance.Save();
+        return true;
+    }
+    public bool CheckDupStudent(StudentData sd)
+    {
+        if (MyStudents.Count == 0)
+            return false;
         else
         {
-            Destroy(this.gameObject);
-        }
-    }
-
-    public static Player Instance
-    {
-        get
-        {
-            if (null == instance)
+            for (int i = 0; i < MyStudents.Count; i++)
             {
-                return null;
+                if (MyStudents[i].Name.Equals(sd.Name))
+                {
+                    return true;
+                }
             }
-
-            return instance;
         }
+        return false;
     }
 
-    public PlayerData MyPlayer;
-    public List<CharacterData> MyStudents;
-    public List<ItemData> MyItems;
-
-    private void Update()
+    public void AddItem(ObjectData od, int amount)
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        int index = CheckDupItem(od);
+        if (index != -1)
         {
-            MyPlayer.MyExp += 100;
+            MyItems[index].Count += amount;
+            DataManager.Instance.Save();
+            return;
         }
+        ItemData newItem = new ItemData(od.Name, amount);
+        MyItems.Add(newItem);
+        DataManager.Instance.Save();
+    }
+
+    public int CheckDupItem(ObjectData od)
+    {
+        for (int i = 0; i < MyItems.Count; i++)
+        {
+            if (MyItems[i].Name.Equals(od.Name))
+                return i;
+        }
+        return -1;
     }
 }
-
