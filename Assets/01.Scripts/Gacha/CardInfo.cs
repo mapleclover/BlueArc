@@ -18,7 +18,7 @@ public class CardInfo : MonoBehaviour, IPointerDownHandler
 
     [SerializeField] private GameObject NewCharacter;
     [SerializeField] private GameObject EligmaCount;
-    
+
     public bool revealed = false;
     private Coroutine Coreveal;
     

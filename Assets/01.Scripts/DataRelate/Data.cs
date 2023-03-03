@@ -76,7 +76,6 @@ public class PlayerData
         this.myRecruitmentPoint = Rpoint;
     }
 }
-
 [Serializable]
 public class CharacterData
 {

@@ -239,6 +239,7 @@ MonoBehaviour:
     _skill2Level: 0
     _skill3Level: 0
   sd: {fileID: 0}
+  LeaderSign: {fileID: 0}
 --- !u!1 &6191805743297553243
 GameObject:
   m_ObjectHideFlags: 0

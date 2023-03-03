@@ -7,7 +7,7 @@ public class FormationStudentCard : MonoBehaviour
     public Image Outline;
     public CharacterData cd;
     public StudentData sd;
-    
+
     public void UpdateCard(CharacterData ccd)
     {
         cd = ccd;
