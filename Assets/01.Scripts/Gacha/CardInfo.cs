@@ -30,7 +30,9 @@ public class CardInfo : MonoBehaviour, IPointerDownHandler
     
     public void OnPointerDown(PointerEventData eventData)
     {
-        RevealCard();
+        GachaSystem gachaSystem = FindObjectOfType<GachaSystem>();
+        if(gachaSystem != null)
+            gachaSystem.RevealOne();
     }
     public void UpdateCard()
     {

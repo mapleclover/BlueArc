@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/02.Scenes/02.Main.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/02.Scenes/03.Map.unity
+    path: Assets/02.Scenes/03.StudentList.unity
     guid: fa590c1817c51e84ca70986966fb2d8d
+  - enabled: 1
+    path: Assets/02.Scenes/04.Gacha.unity
+    guid: 4af9d073f5364a54aacde87ec4e2280b
   m_configObjects: {}

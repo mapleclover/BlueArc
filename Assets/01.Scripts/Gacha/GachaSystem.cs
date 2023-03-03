@@ -14,9 +14,13 @@ public class GachaSystem : MonoBehaviour
     [SerializeField] private GameObject ensureBox;
     [SerializeField] private GameObject errorBox;
     [SerializeField] private GameObject parentCanvas;
+    
+    [SerializeField] private GameObject reensureBox;
+    [SerializeField] private GameObject reerrorBox;
     [SerializeField] private Vector3[] pos = new Vector3[10];
     [SerializeField] private GameObject result;
     [SerializeField] private TextMeshProUGUI ensureText;
+    [SerializeField] private TextMeshProUGUI reensureText;
 
     private int pullCount;
 
@@ -33,6 +37,18 @@ public class GachaSystem : MonoBehaviour
             ensureBox.SetActive(true);
         }
     }
+    public void CheckPullAgain()
+    {
+        reensureText.text = $"Proceed to recruit with {120*pullCount} Pyroxenes?";
+        if (Player.Instance.MyPlayer.MyCash < pullCount*120)
+        {
+            reerrorBox.SetActive(true);
+        }
+        else
+        {
+            reensureBox.SetActive(true);
+        }
+    }
     public void CloseErrorBox()
     {
         errorBox.SetActive(false);
@@ -42,12 +58,21 @@ public class GachaSystem : MonoBehaviour
     {
         ensureBox.SetActive(false);
     }
+    public void CloseReerrorBox()
+    {
+        reerrorBox.SetActive(false);
+    }
+    public void CloseReensureBox()
+    {
+        reensureBox.SetActive(false);
+    }
 
     public void ConfirmResult()
     {
         if (CheckAllReveal())
         {
             parentCanvas.SetActive(false);
+            DeleteResultCard();
         }
     }
 
@@ -55,10 +80,22 @@ public class GachaSystem : MonoBehaviour
     {
         if (CheckAllReveal())
         {
-            CheckPull(pullCount);
+            CheckPullAgain();
         }
     }
 
+    public void RevealOne()
+    {
+        for (int i = 0; i < pullList.Length; i++)
+        {
+            if (!pullList[i].GetComponent<CardInfo>().revealed)
+            {
+                pullList[i].GetComponent<CardInfo>().RevealCard();
+                break;
+            }
+        }
+    }
+    
     public bool CheckAllReveal()
     {
         int count = 0;
@@ -80,13 +117,8 @@ public class GachaSystem : MonoBehaviour
     {
         pullList = new GameObject[pullCount];
         Player.Instance.MyPlayer.MyCash -= pullCount * 120;
-        if (result.transform.childCount > 0)
-        {
-            for (int i = result.transform.childCount - 1; i >= 0; i--)
-            {
-                Destroy(result.transform.GetChild(i).gameObject);
-            }
-        }
+        Player.Instance.MyPlayer.MyRecruitmentPoint += pullCount;
+        DeleteResultCard();
         for (int k = 0; k < pullCount; k++)
         {
             int rand = Random.Range(1, 1001);
@@ -97,7 +129,15 @@ public class GachaSystem : MonoBehaviour
                     pullList[k] = Instantiate(cardPrefab);
                     pullList[k].transform.SetParent(result.transform);
                     pullList[k].transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-                    pullList[k].transform.localPosition = pos[k];
+                    if (pullCount == 1)
+                    {
+                        pullList[k].transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
+                    }
+                    else
+                    {
+                        pullList[k].transform.localPosition = pos[k];
+                    }
+                    
                     if (k == 9 && gacha[i].rarity == 1)
                     {
                         pullList[k].GetComponent<CardInfo>()._studentData = Reward(gacha[i].rarity+1, pullList[k]);
@@ -106,14 +146,33 @@ public class GachaSystem : MonoBehaviour
                     {
                         pullList[k].GetComponent<CardInfo>()._studentData = Reward(gacha[i].rarity, pullList[k]);
                     }
+
                     pullList[k].GetComponent<CardInfo>().UpdateCard();
-                    parentCanvas.SetActive(true);
                     break;
                 }
             }
         }
+        parentCanvas.SetActive(true);
+        if (reensureBox.activeSelf)
+        {
+            reensureBox.SetActive(false);
+        }
+        if (reerrorBox.activeSelf)
+        {
+            reerrorBox.SetActive(false);
+        }
     }
-    
+
+    private void DeleteResultCard()
+    {
+        if (result.transform.childCount > 0)
+        {
+            for (int i = result.transform.childCount - 1; i >= 0; i--)
+            {
+                Destroy(result.transform.GetChild(i).gameObject);
+            }
+        }
+    }
     private StudentData Reward(int rarity, GameObject Card)
     {
         GachaRate gr = Array.Find(gacha, gl => gl.rarity == rarity);

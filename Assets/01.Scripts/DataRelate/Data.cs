@@ -26,6 +26,8 @@ public class PlayerData
     [SerializeField]private int myCredit = 0;
     [SerializeField]private int myCash = 0;
 
+    [SerializeField]private int myRecruitmentPoint = 0;
+
     public string TeacherName
     {
         get => teacherName;
@@ -56,8 +58,14 @@ public class PlayerData
         get => myCash;
         set => myCash = value;
     }
-    
-    public PlayerData(string name = "NoName", int level = 1, int exp = 0, int stamina = 24, int credit = 0, int cash = 0)
+    public int MyRecruitmentPoint
+    {
+        get => myRecruitmentPoint;
+        set => myRecruitmentPoint = value;
+    }
+
+    public PlayerData(string name = "NoName", int level = 1, int exp = 0, int stamina = 24, int credit = 0,
+        int cash = 0, int Rpoint = 0)
     {
         this.teacherName = name;
         this.teacherLevel = level;
@@ -65,6 +73,7 @@ public class PlayerData
         this.myStamina = stamina;
         this.myCredit = credit;
         this.myCash = cash;
+        this.myRecruitmentPoint = Rpoint;
     }
 }
 
@@ -72,10 +81,12 @@ public class PlayerData
 public class CharacterData
 {
     [SerializeField] private string _name; //학생 이름
-
+    [SerializeField] private int _acquiredNumber;
+    [SerializeField] private string _combatClass;
     [Header("ChangingStat")]
     [SerializeField] private int _rarity;
     [SerializeField] private int _level;
+    [SerializeField] private int _attackType;
     [SerializeField] private int _exp;
     [SerializeField] private int _skillExLevel;
     [SerializeField] private int _skill1Level;
@@ -87,6 +98,12 @@ public class CharacterData
         get => _name;
         set => _name = value;
     }
+    
+    public int AcquiredNumber
+    {
+        get => _acquiredNumber;
+        set => _acquiredNumber = value;
+    }
     public int Rarity
     {
         get => _rarity;
@@ -96,6 +113,11 @@ public class CharacterData
     {
         get => _level;
         set => _level = value;
+    }
+    public int AttackType
+    {
+        get => _attackType;
+        set => _attackType = value;
     }
     public int Exp
     {
@@ -125,11 +147,20 @@ public class CharacterData
         get => _skill3Level;
         set => _skill3Level = value;
     }
+
+    public string CombatClass
+    {
+        get => _combatClass;
+        set => _combatClass = value;
+    }
     
-    public CharacterData(string name, int rarity, int level = 1, int exp = 0, int skillEx = 1, int skill1 = 1, int skill2 = 1, int skill3 = 1)
+    public CharacterData(string name, int rarity, int attackType, string combatClass, int level = 1, int exp = 0, int skillEx = 1, int skill1 = 1, int skill2 = 1, int skill3 = 1)
     {
         Name = name;
         Rarity = rarity;
+        AttackType = attackType; 
+        CombatClass = combatClass;
+        AcquiredNumber = Player.Instance.MyStudents.Count;
         Level = level;
         Exp = exp;
         SkillExLevel = skillEx;

@@ -1,10 +1,14 @@
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 public class Player : Singleton<Player>
 {
     public PlayerData MyPlayer = new PlayerData();
     public List<CharacterData> MyStudents = new List<CharacterData>();
     public List<ItemData> MyItems = new List<ItemData>();
+    public CharacterData[] MyStrikerParty = new CharacterData[4];
+    public CharacterData[] MySpecialParty = new CharacterData[2];
+
 
     public bool AddStudent(StudentData sd)
     {
@@ -26,9 +30,8 @@ public class Player : Singleton<Player>
             AddItem(DataContainer.Instance.items[0], amount);
             return false;
         }
-        CharacterData newCharacter = new CharacterData(sd.Name, sd.BaseRarity);
+        CharacterData newCharacter = new CharacterData(sd.Name, sd.BaseRarity, (int)sd.AttackType, sd.CombatClass.ToString());
         MyStudents.Add(newCharacter);
-        DataManager.Instance.Save();
         return true;
     }
     public bool CheckDupStudent(StudentData sd)
@@ -54,12 +57,10 @@ public class Player : Singleton<Player>
         if (index != -1)
         {
             MyItems[index].Count += amount;
-            DataManager.Instance.Save();
             return;
         }
         ItemData newItem = new ItemData(od.Name, amount);
         MyItems.Add(newItem);
-        DataManager.Instance.Save();
     }
 
     public int CheckDupItem(ObjectData od)
@@ -70,5 +71,51 @@ public class Player : Singleton<Player>
                 return i;
         }
         return -1;
+    }
+
+    public void AddParty(CharacterData ccd)
+    {
+        if (ccd.CombatClass.Equals("Striker"))
+        {
+            for (int i = 0; i < MyStrikerParty.Length; i++)
+            {
+                if (MyStrikerParty[i] == null)
+                    continue;
+                if (ccd.Name.Equals(MyStrikerParty[i].Name))
+                {
+                    MyStrikerParty[i] = null;
+                    return;
+                }
+            }
+            for (int i = 0; i < MyStrikerParty.Length; i++)
+            {
+                if (MyStrikerParty[i] == null)
+                {
+                    MyStrikerParty[i] = ccd;
+                    return;
+                }
+            }
+        }
+        else if (ccd.CombatClass.Equals("Special"))
+        {
+            for (int i = 0; i < MySpecialParty.Length; i++)
+            {
+                if (MySpecialParty[i] == null)
+                    continue;
+                if (ccd.Name.Equals(MySpecialParty[i].Name))
+                {
+                    MySpecialParty[i] = null;
+                    return;
+                }
+            }
+            for (int i = 0; i < MySpecialParty.Length; i++)
+            {
+                if (MySpecialParty[i] == null)
+                {
+                    MySpecialParty[i] = ccd;
+                    return;
+                }
+            }
+        }
     }
 }
